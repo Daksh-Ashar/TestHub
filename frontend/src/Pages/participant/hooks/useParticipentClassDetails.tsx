@@ -5,10 +5,10 @@ import type { ColDef } from "ag-grid-community";
 import api from "../../../api/axios.js";
 import type { Test } from "../../../Types/test.type.js";
 
-export const  useParticipentClassDetails = (classId: string) => {
+export const  useParticipentClassDetails = (classIdParam?: string) => {
 
-  const { classId } = useParams<{ classId: string }>();
-
+  const { classId: routeClassId } = useParams<{ classId: string }>();
+  const classId = classIdParam ?? routeClassId;
   const [activeTab, setActiveTab] = useState<"details" | "tests">("details");
 
   const [tests, setTests] = useState<Test[]>([]);
