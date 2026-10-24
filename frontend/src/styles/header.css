@@ -1,0 +1,21 @@
+.header {
+  height: 60px;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 20px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.profileCircle {
+  width: 40px;
+  height: 40px;
+  background: #3b82f6;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-weight: bold;
+}

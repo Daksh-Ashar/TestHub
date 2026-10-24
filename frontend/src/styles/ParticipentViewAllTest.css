@@ -1,0 +1,17 @@
+.startTestBtnCls
+ {
+    background-color: transparent;
+    color: #255b8e;
+    font-weight: 700;
+    outline: none;
+    border: none;
+ }
+
+ .startTestBtnCls:hover
+ {
+    cursor: pointer;
+    text-decoration: underline;
+    font-weight: 700;
+    outline: none;
+    border: none;
+ }

@@ -1,0 +1,42 @@
+.toolbar {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+/* square button */
+.btn-square {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  font-size: 12px;
+}
+
+.toolbar {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+/* 🔥 TRUE compact override */
+.btn-xs {
+  padding: 2px 8px !important;   /* override big padding */
+  font-size: 11px !important;    /* smaller text */
+  height: 28px !important;       /* force height */
+  min-height: 28px !important;
+
+  line-height: 1 !important;
+  border-radius: 6px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: none; /* remove heavy look */
+}

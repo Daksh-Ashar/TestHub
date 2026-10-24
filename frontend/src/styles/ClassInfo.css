@@ -1,0 +1,11 @@
+.ClassInfoCls
+{
+    padding: 1rem;
+    font-family: ui-monospace;
+    font-size: 1.2rem;
+}
+
+.ClassInfoCls p
+{
+    margin: 0.5rem 0;
+}

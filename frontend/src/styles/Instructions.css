@@ -1,0 +1,83 @@
+.instruction-layout {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+}
+
+/* LEFT SIDE */
+.instruction-content {
+  flex: 2;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+/* RIGHT SIDE (sticky action panel) */
+.instruction-action {
+  flex: 1;
+  position: sticky;
+  top: 20px;
+  height: fit-content;
+}
+
+.action-card {
+  background: #fff;
+  border: 2px solid #4a90e2;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.start-btn {
+  width: 100%;
+  padding: 12px;
+  background: #4a90e2;
+  color: white;
+  border: none;
+  margin-top: 10px;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+/* Cards */
+.card {
+  background: #f9f9f9;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  border-left: 5px solid #4a90e2;
+}
+
+.warning {
+  border-left: 5px solid orange;
+}
+
+.danger {
+  border-left: 5px solid red;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .instruction-layout {
+    flex-direction: column;
+  }
+
+  .instruction-action {
+    position: static;
+  }
+}
+
+.PadLeft {
+    padding: 1rem;
+}
+
+.box {
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.green { background: green; }
+.orange { background: orange; }
+.blue { background: blue; }

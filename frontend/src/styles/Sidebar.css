@@ -1,0 +1,39 @@
+.sidebar {
+  width: 240px;
+  background-color: #1e293b;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.sidebar-logo {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  flex: 1;
+}
+
+.sidebar-menu a {
+  color: #cbd5e1;
+  text-decoration: none;
+}
+
+.sidebar-menu a.active {
+  color: white;
+  font-weight: bold;
+}
+
+.logout-btn {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}

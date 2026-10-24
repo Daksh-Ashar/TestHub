@@ -1,0 +1,23 @@
+.ag-theme-quartz {
+  --ag-header-background-color: #dadada;
+  --ag-header-height: 52px;
+  --ag-row-height: 48px;
+  --ag-font-size: 14px;
+}
+
+.ag-theme-quartz .ag-header {
+  --ag-header-background-color: #6b7280;
+}
+
+.ag-theme-quartz .ag-header-cell-text {
+  color: white;
+  font-weight: 700;
+}
+
+.actionButtonCls {
+  background-color: transparent;
+  color: #255b8e;
+  font-weight: 700;
+  outline: none;
+  border: none;
+}

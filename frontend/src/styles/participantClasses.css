@@ -1,0 +1,152 @@
+
+.class-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.class-card {
+  background: white;
+  padding: 15px;
+  border-radius: 6px;
+  width: 260px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: space-evenly;
+}
+
+.class-card h3 {
+  margin-bottom: 8px;
+}
+
+.class-card p {
+  font-size: 14px;
+  color: #255b8e;
+  margin-bottom: 15%;
+}
+
+.class-code {
+  display: block;
+  margin-top: 10px;
+  font-size: 12px;
+  color: #888;
+}
+
+.join-class-section {
+  position: absolute;
+  background: white;
+  padding: 20px;
+  border-radius: 6px;
+  width: 350px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.join-class-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.join-class-form input {
+  flex: 1;
+  padding: 8px;
+  margin-top: 20px;
+  border: none;
+  border-bottom: 1px solid black;
+  outline: none;
+}
+
+
+.btn {
+  color: white;
+  border: none;
+  padding: 4%;
+  border-radius: 0px;
+  cursor: pointer;
+  font-weight: 500;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+
+  /* ✅ DEFAULT GRADIENT */
+  background: linear-gradient(
+    45deg,
+    #073A7C 0%,
+    #1767AD 60%,
+    #255B8E 100%
+  );
+
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+}
+
+/* hover effect (slight movement + glow) */
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(23, 103, 173, 0.35);
+}
+
+/* optional subtle shine animation */
+.btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 50%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: skewX(-20deg);
+  transition: left 0.6s ease;
+}
+
+.btn:hover::after {
+  left: 150%;
+}
+
+
+.btn-link {
+  text-decoration: none;
+  align-items: center;
+  text-align: center;
+}
+
+
+.participant-classes-page .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.btn.JoinClassButton {
+  background: linear-gradient(45deg, #073A7C 0%, #1767AD 60%, #255B8E 100%);
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  font-size: 18px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn.cancel-btn {
+  background: linear-gradient(45deg, #ffffff 0%, #ffffff 60%, #ffffff 100%);
+  color: #073A7C;
+}
+
+.join-class-form .ActionBtns {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+  justify-content: flex-end;
+}
+
+.preventClicks
+{
+  pointer-events: none;
+  cursor: none;
+}

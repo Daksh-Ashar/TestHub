@@ -1,0 +1,26 @@
+.role-container {
+  margin-top: 1rem;
+}
+
+.role-label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.role-options {
+  display: flex;
+  gap: 1.5rem;
+  padding-bottom: 1rem;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+}
+
+.radio-option input[type="radio"] {
+  cursor: pointer;
+}
