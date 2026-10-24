@@ -26,9 +26,16 @@ export const getQuestionsByTest = async (req: AuthenticatedRequestWithBody<{}, U
     if (!testId || Array.isArray(testId)) {
       return res.status(400).json({ message: "Invalid testId" });
     }
-    const questions = await QuestionService.getQuestionsByTest(testId);
+    const questions = await QuestionService.getQuestionsByTest(
+      testId,
+      req.user!.userId,
+      req.user!.role
+    );
     res.status(200).json(questions);
-  } catch (error: any) {
-    res.status(400).json({ message: error.message });
+  } catch (error) {
+    if (error instanceof QuestionService.QuestionRequestError) {
+      return res.status(error.statusCode).json({ message: error.message });
+    }
+    throw error;
   }
 };
