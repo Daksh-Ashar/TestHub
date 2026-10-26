@@ -4,12 +4,6 @@ import "../../styles/creatorClasses.css";
 import { Link } from "react-router-dom";
 import { ClassContext } from "../Class/Contexts/classContext";
 
-interface Class {
-  _id: string;
-  name: string;
-  description?: string;
-}
-
 const CreatorClasses = () => {
   const { classes, fetchClasses } = useContext(ClassContext)!;
 

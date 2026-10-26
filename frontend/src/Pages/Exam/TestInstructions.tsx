@@ -1,5 +1,4 @@
 import { useNavigate, useParams } from "react-router-dom";
-import api from "../../api/axios";
 import "../../styles/instructions.css";
 
 export default function TestInstructions() {
