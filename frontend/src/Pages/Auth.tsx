@@ -3,22 +3,49 @@ import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import "../Styles/authStyle.css";
 
+const getApiErrorMessage = (error: unknown, fallback: string) => {
+  if (
+    typeof error === "object" &&
+    error !== null &&
+    "response" in error &&
+    typeof error.response === "object" &&
+    error.response !== null &&
+    "data" in error.response &&
+    typeof error.response.data === "object" &&
+    error.response.data !== null &&
+    "message" in error.response.data &&
+    typeof error.response.data.message === "string"
+  ) {
+    return error.response.data.message;
+  }
+
+  return fallback;
+};
+
 const Auth = () => {
   const [activeTab, setActiveTab] = useState<"login" | "register">("login");
 
   return (
-    <div style={containerStyle}>
-      <div style={cardStyle}>
-        <div style={tabStyle}>
+    <div className="flex min-h-screen items-center justify-center bg-slate-100 p-4">
+      <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl sm:p-8">
+        <div className="mb-6 flex overflow-hidden rounded-lg bg-slate-100">
           <button
             onClick={() => setActiveTab("login")}
-            style={activeTab === "login" ? activeBtn : btn}
+            className={`flex-1 px-3 py-2 text-sm font-semibold transition-colors ${
+              activeTab === "login"
+                ? "bg-brand-700 text-white"
+                : "text-slate-600 hover:bg-slate-200"
+            }`}
           >
             Login
           </button>
           <button
             onClick={() => setActiveTab("register")}
-            style={activeTab === "register" ? activeBtn : btn}
+            className={`flex-1 px-3 py-2 text-sm font-semibold transition-colors ${
+              activeTab === "register"
+                ? "bg-brand-700 text-white"
+                : "text-slate-600 hover:bg-slate-200"
+            }`}
           >
             Register
           </button>
@@ -54,19 +81,19 @@ const LoginForm = () => {
       } else if (user?.role?.toLowerCase() === "participant") {
         navigate("/participant");
       }
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Login failed");
+    } catch (err: unknown) {
+      setError(getApiErrorMessage(err, "Login failed"));
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleLogin}>
+    <form onSubmit={handleLogin} className="space-y-3">
       <input
         type="email"
         placeholder="Email"
-        style={input}
+        className="w-full rounded-lg border border-slate-300 px-3 py-2 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         required
@@ -74,15 +101,19 @@ const LoginForm = () => {
       <input
         type="password"
         placeholder="Password"
-        style={input}
+        className="w-full rounded-lg border border-slate-300 px-3 py-2 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         required
       />
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <p className="text-sm text-red-600">{error}</p>}
 
-      <button type="submit" style={primaryBtn} disabled={loading}>
+      <button
+        type="submit"
+        className="w-full rounded-lg bg-brand-700 px-3 py-2 font-semibold text-white transition hover:bg-brand-600 disabled:cursor-not-allowed disabled:opacity-60"
+        disabled={loading}
+      >
         {loading ? "Logging in..." : "Login"}
       </button>
     </form>
@@ -113,19 +144,19 @@ const RegisterForm = () => {
       } else if (user?.role?.toLowerCase() === "participant") {
         navigate("/participant");
       }
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Registration failed");
+    } catch (err: unknown) {
+      setError(getApiErrorMessage(err, "Registration failed"));
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleRegister}>
+    <form onSubmit={handleRegister} className="space-y-3">
       <input
         type="text"
         placeholder="Name"
-        style={input}
+        className="w-full rounded-lg border border-slate-300 px-3 py-2 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20"
         value={name}
         onChange={(e) => setName(e.target.value)}
         required
@@ -133,7 +164,7 @@ const RegisterForm = () => {
       <input
         type="email"
         placeholder="Email"
-        style={input}
+        className="w-full rounded-lg border border-slate-300 px-3 py-2 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         required
@@ -141,7 +172,7 @@ const RegisterForm = () => {
       <input
         type="password"
         placeholder="Password"
-        style={input}
+        className="w-full rounded-lg border border-slate-300 px-3 py-2 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         required
@@ -179,65 +210,17 @@ const RegisterForm = () => {
         </div>
       </div>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <p className="text-sm text-red-600">{error}</p>}
 
-      <button type="submit" style={primaryBtn} disabled={loading}>
+      <button
+        type="submit"
+        className="w-full rounded-lg bg-brand-700 px-3 py-2 font-semibold text-white transition hover:bg-brand-600 disabled:cursor-not-allowed disabled:opacity-60"
+        disabled={loading}
+      >
         {loading ? "Registering..." : "Register"}
       </button>
     </form>
   );
-};
-
-/* ---------------- STYLES ---------------- */
-
-const containerStyle = {
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  height: "100vh",
-  background: "#F3F4F6",
-};
-
-const cardStyle = {
-  background: "white",
-  padding: "2rem",
-  borderRadius: "12px",
-  width: "350px",
-  boxShadow: "0 10px 25px rgba(0,0,0,0.1)",
-};
-
-const tabStyle = {
-  display: "flex",
-  marginBottom: "1rem",
-};
-
-const btn = {
-  flex: 1,
-  padding: "10px",
-  border: "none",
-  cursor: "pointer",
-  background: "#e5e7eb",
-};
-
-const activeBtn = {
-  ...btn,
-  background: "#1D4ED8",
-  color: "white",
-};
-
-const input = {
-  width: "100%",
-  padding: "10px",
-  marginBottom: "10px",
-};
-
-const primaryBtn = {
-  width: "100%",
-  padding: "10px",
-  background: "#1D4ED8",
-  color: "white",
-  border: "none",
-  cursor: "pointer",
 };
 
 export default Auth;
