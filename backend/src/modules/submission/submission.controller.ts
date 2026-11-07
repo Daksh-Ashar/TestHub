@@ -15,7 +15,11 @@ export const submitTest = async (req: AuthenticatedRequestWithBody<SubmitTestBod
     );
 
     res.status(201).json(submission);
-  } catch (error: any) {
-    res.status(400).json({ message: error.message });
+  } catch (error: unknown) {
+    if (error instanceof SubmissionService.SubmissionRequestError) {
+      return res.status(error.statusCode).json({ message: error.message });
+    }
+
+    throw error;
   }
 };
