@@ -3,6 +3,21 @@
   gap: 20px;
 }
 
+.test-status {
+  max-width: 560px;
+  margin: 48px auto;
+  padding: 32px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.test-status button {
+  margin-top: 12px;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
 .question-panel {
   width: 60%;
 }
