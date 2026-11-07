@@ -4,6 +4,7 @@ import { ClassService } from "./class.service.js";
 import type { CreateClassBody, JoinClassBody} from "../../constants/roles.js";
 import type { AuthenticatedRequestWithBody } from "../../types/express.js";
 import type { UserPayload } from "../../types/express.js";
+import { respondWithError } from "../../utils/errorResponse.js";
 
 
 export class ClassController {
@@ -17,8 +18,8 @@ export class ClassController {
       const creatorId = new Types.ObjectId(req.user.userId);
       const cls = await ClassService.createClass(name, description, creatorId);
       res.status(201).json(cls);
-    } catch (err: any) {
-      next(err);
+    } catch (err: unknown) {
+      return respondWithError(res, err, "Creating class failed");
     }
   }
 
@@ -32,8 +33,8 @@ export class ClassController {
       const participantId = new Types.ObjectId(req.user.userId);
       const cls = await ClassService.joinClass(participantId, joinCode);
       res.status(200).json(cls);
-    } catch (err: any) {
-      next(err);
+    } catch (err: unknown) {
+      return respondWithError(res, err, "Joining class failed");
     }
   }
 
@@ -48,8 +49,8 @@ export class ClassController {
       const role = req.user.role;
       const classes = await ClassService.getMyClasses(userId, role);
       res.status(200).json(classes);
-    } catch (err: any) {
-      next(err);
+    } catch (err: unknown) {
+      return respondWithError(res, err, "Fetching classes failed");
     }
   }
 
@@ -76,9 +77,8 @@ export class ClassController {
 
       const participants = await ClassService.getParticipants(creatorId, classId);
       res.status(200).json(participants);
-    } catch (err: any) {
-      next(err);
+    } catch (err: unknown) {
+      return respondWithError(res, err, "Fetching participants failed");
     }
     }
 }
-

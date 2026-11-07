@@ -7,6 +7,7 @@ import questionRoutes from "./modules/question/question.route.js";
 import submissionRoutes from "./modules/submission/submission.route.js";
 import resultRoutes from "./modules/result/result.route.js";
 import cors from "cors";
+import { errorHandler } from "./utils/errorResponse.js";
 
 
 const app = express();
@@ -45,5 +46,7 @@ app.use("/api/results", resultRoutes);
 app.get("/", (req, res) => {
   res.send("✅ Server running!");
 });
+
+app.use(errorHandler);
 
 export default app;

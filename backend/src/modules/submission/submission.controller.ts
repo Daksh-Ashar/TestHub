@@ -3,6 +3,7 @@ import * as SubmissionService from "./submission.service.js";
 import type { UserPayload } from "../../types/express.js";
 import type { AuthenticatedRequestWithBody } from "../../types/express.js";
 import type { SubmitTestBody } from "../../constants/roles.js";
+import { respondWithError } from "../../utils/errorResponse.js";
 
 export const submitTest = async (req: AuthenticatedRequestWithBody<SubmitTestBody, UserPayload>, res: Response) => {
   try {
@@ -16,10 +17,6 @@ export const submitTest = async (req: AuthenticatedRequestWithBody<SubmitTestBod
 
     res.status(201).json(submission);
   } catch (error: unknown) {
-    if (error instanceof SubmissionService.SubmissionRequestError) {
-      return res.status(error.statusCode).json({ message: error.message });
-    }
-
-    throw error;
+    return respondWithError(res, error, "Submitting test failed");
   }
 };

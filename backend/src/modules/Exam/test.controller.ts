@@ -5,6 +5,7 @@ import type { AsyncRequestHandler, AuthenticatedRequestWithBody } from "../../ty
 import type { UserPayload } from "../../types/express.js";
 import type { CreateTestBody } from "../../constants/roles.js";
 import { Types } from "mongoose";
+import { respondWithError } from "../../utils/errorResponse.js";
 
 export const createTest = async (req: AuthenticatedRequestWithBody<CreateTestBody, UserPayload>, res: Response) => {
   try {
@@ -19,8 +20,8 @@ export const createTest = async (req: AuthenticatedRequestWithBody<CreateTestBod
     );
 
     res.status(201).json(test);
-  } catch (error: any) {
-    res.status(400).json({ message: error.message });
+  } catch (error: unknown) {
+    return respondWithError(res, error, "Creating test failed");
   }
 };
 
@@ -31,8 +32,8 @@ export const publishTest = async (req: AuthRequest<{ testId: string }>, res: Res
     const test = await TestService.publishTest(testId, req.user!.userId);
 
     res.json(test);
-  } catch (error: any) {
-    res.status(400).json({ message: error.message });
+  } catch (error: unknown) {
+    return respondWithError(res, error, "Publishing test failed");
   }
 };
 
@@ -42,8 +43,8 @@ export const getTestByClassId = async (req: AuthRequest<{ classId: string }>, re
 
     const tests = await TestService.getTestByClassId(classId);
     res.json(tests);
-  } catch (error: any) {
-    res.status(400).json({ message: error.message });
+  } catch (error: unknown) {
+    return respondWithError(res, error, "Fetching class tests failed");
   }
 };
 
@@ -52,8 +53,8 @@ export const getTestListByRole = async (req: AuthRequest, res: Response) => {
     console.log("Controller - Fetching test list for user:", req.user);
     const tests = await TestService.getTestListByRole(req.user!.userId, req.user!.role);
     res.json(tests);
-  } catch (error: any) {
-    res.status(400).json({ message: error.message });
+  } catch (error: unknown) {
+    return respondWithError(res, error, "Fetching test list failed");
   }
 };
 
@@ -63,8 +64,7 @@ export const getBasicInfoByTestId = async (req: AuthRequest<{ testId: string }>,
     const userId = new Types.ObjectId(req.user!.userId);
     const testInfo = await TestService.getBasicInfoByTestId(testId, userId, req.user!.role);
     res.json(testInfo);
-  } catch (error: any) {
-    res.status(400).json({ message: error.message });
+  } catch (error: unknown) {
+    return respondWithError(res, error, "Fetching test details failed");
   }
 };
-
