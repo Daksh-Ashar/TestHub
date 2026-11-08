@@ -3,6 +3,7 @@ import * as QuestionService from "./question.service.js";
 import type {  AuthenticatedRequestWithBody } from "../../types/express.js";
 import type { UserPayload } from "../../types/express.js";
 import type { AddQuestionBody } from "../../constants/roles.js";
+import { respondWithError } from "../../utils/errorResponse.js";
 
 export const addQuestion = async (req: AuthenticatedRequestWithBody<AddQuestionBody, UserPayload>, res: Response) => {
   try {
@@ -15,8 +16,8 @@ export const addQuestion = async (req: AuthenticatedRequestWithBody<AddQuestionB
     );
 
     res.status(201).json(question);
-  } catch (error: any) {
-    res.status(400).json({ message: error.message });
+  } catch (error: unknown) {
+    return respondWithError(res, error, "Adding question failed");
   }
 };
 
@@ -33,9 +34,6 @@ export const getQuestionsByTest = async (req: AuthenticatedRequestWithBody<{}, U
     );
     res.status(200).json(questions);
   } catch (error) {
-    if (error instanceof QuestionService.QuestionRequestError) {
-      return res.status(error.statusCode).json({ message: error.message });
-    }
-    throw error;
+    return respondWithError(res, error, "Fetching questions failed");
   }
 };
