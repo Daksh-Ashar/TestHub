@@ -30,6 +30,8 @@ const submissionSchema = new Schema<ISubmission>(
   { timestamps: true }
 );
 
+submissionSchema.index({ testId: 1, participantId: 1 }, { unique: true });
+
 export const SubmissionModel = mongoose.model<ISubmission>(
   "Submission",
   submissionSchema
