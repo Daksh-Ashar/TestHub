@@ -1,5 +1,6 @@
 import { TestModel } from "./test.model.js";
 import { ClassModel } from "../class/class.model.js";
+import { SubmissionModel } from "../submission/submission.model.js";
 import type { ObjectId } from "mongoose";
 import { Types } from "mongoose";
 
@@ -47,12 +48,32 @@ export const publishTest = async (testId: string, creatorId: string) => {
 };
 
 
-export const getTestByClassId = async (classId: string) => {
+export const getTestByClassId = async (
+  classId: string,
+  userId: string,
+  role: string,
+) => {
   const tests = await TestModel.find({ classId, isPublished: true });
-  if(tests.length === 0) throw new Error("No tests found for this class");
-  
+  if (tests.length === 0) throw new Error("No tests found for this class");
+
+  if (role === "participant") {
+    const submittedTestIds = new Set(
+      (
+        await SubmissionModel.find({
+          participantId: userId,
+          testId: { $in: tests.map((test) => test._id) },
+        }).distinct("testId")
+      ).map((testId) => testId.toString()),
+    );
+
+    return tests.map((test) => ({
+      ...test.toObject(),
+      hasSubmitted: submittedTestIds.has(test._id.toString()),
+    }));
+  }
+
   return tests;
-}
+};
 
 export const getTestListByRole = async (userId: string, role: string) => {
   if (role === "creator") {
@@ -70,10 +91,24 @@ export const getTestListByRole = async (userId: string, role: string) => {
     // ✅ optimization: if no classes joined, skip DB call
     if (classIds.length === 0) return [];
 
-    return await TestModel.find({
+    const tests = await TestModel.find({
       classId: { $in: classIds },
       isPublished: true
     });
+
+    const submittedTestIds = new Set(
+      (
+        await SubmissionModel.find({
+          participantId: userId,
+          testId: { $in: tests.map((test) => test._id) },
+        }).distinct("testId")
+      ).map((testId) => testId.toString()),
+    );
+
+    return tests.map((test) => ({
+      ...test.toObject(),
+      hasSubmitted: submittedTestIds.has(test._id.toString()),
+    }));
   }
 
   throw new Error("Invalid role");
@@ -93,13 +128,18 @@ export const getBasicInfoByTestId = async (testId: string, userId: Types.ObjectI
     if (!classInfo) throw new Error("Class not found");
   
     if (classInfo.participants.includes(userId) && test.isPublished) {
+      const submission = await SubmissionModel.exists({
+        testId: test._id,
+        participantId: userId,
+      });
+      if (submission) throw new Error("Test already submitted");
+
       return test;
     }
   }
 
   throw new Error("Not authorized to view this test");
 };
-
 
 
 

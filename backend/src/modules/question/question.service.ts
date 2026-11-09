@@ -1,13 +1,14 @@
 import { QuestionModel } from "./question.model.js";
 import { TestModel } from "../Exam/test.model.js";
 import { ClassModel } from "../class/class.model.js";
+import { SubmissionModel } from "../submission/submission.model.js";
 import { ROLES } from "../../constants/roles.js";
 import type { Role } from "../../constants/roles.js";
 
 export class QuestionRequestError extends Error {
   constructor(
     message: string,
-    public readonly statusCode: 403 | 404
+    public readonly statusCode: 403 | 404 | 409
   ) {
     super(message);
     this.name = "QuestionRequestError";
@@ -59,6 +60,14 @@ export const getQuestionsByTest = async (
     });
     if (!isEnrolled) {
       throw new QuestionRequestError("Not authorized to view this test", 403);
+    }
+
+    const submission = await SubmissionModel.exists({
+      testId: test._id,
+      participantId: userId,
+    });
+    if (submission) {
+      throw new QuestionRequestError("Test already submitted", 409);
     }
   } else {
     throw new QuestionRequestError("Not authorized to view this test", 403);

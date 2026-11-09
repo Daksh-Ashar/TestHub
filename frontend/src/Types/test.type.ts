@@ -5,6 +5,7 @@ export type Test = {
     status: "Draft" | "Published";
     classId: string;
     duration: number; // in minutes
+    hasSubmitted?: boolean;
   };
 
 

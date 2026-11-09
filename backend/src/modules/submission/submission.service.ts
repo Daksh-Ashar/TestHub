@@ -44,6 +44,14 @@ export const submitTest = async (
     );
   }
 
+  const existingSubmission = await SubmissionModel.exists({
+    testId,
+    participantId,
+  });
+  if (existingSubmission) {
+    throw new SubmissionRequestError("Test already submitted", 409);
+  }
+
   if (!Array.isArray(answers)) {
     throw new SubmissionRequestError("Answers must be an array");
   }
