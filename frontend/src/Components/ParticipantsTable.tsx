@@ -1,13 +1,10 @@
 import { useContext, useEffect, useState, useMemo } from "react";
 import type { ColDef } from "ag-grid-community";
-import "../styles/participantClasses.css"
 import {
   ClassContext,
   type Participant,
 } from "../Pages/Class/Contexts/classContext";
-
 import DataGrid from "./DataGrid";
-import "../styles/ParticipentTable.css"
 
 export default function ParticipantsTable({
   classId,
@@ -53,11 +50,11 @@ export default function ParticipantsTable({
 
   return (
     <div>
-      <div className="toolbar">
-  <button className="btn btn-square">
-    Add Participant
-  </button>
-</div>
+      <div className="mb-2.5 flex h-11 items-center">
+        <button className="h-11 rounded-md bg-brand-600 px-3 text-sm font-medium text-white hover:bg-brand-700">
+          Add Participant
+        </button>
+      </div>
 
       <DataGrid<Participant>
         rowData={participants}

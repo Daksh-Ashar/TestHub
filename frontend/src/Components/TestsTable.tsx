@@ -60,14 +60,14 @@ export default function TestsTable() {
           const test: Test = params.data;
 
           return (
-            <div style={{ display: "flex", gap: "8px" }}>
-              <button className="btn btn-xs">
+            <div className="flex gap-2">
+              <button className="inline-flex h-7 items-center justify-center rounded-md bg-brand-600 px-2 text-[11px] leading-none text-white hover:bg-brand-700">
                 Edit
               </button>
 
               {!test.isPublished && (
                 <button
-                  className="btn btn-xs"
+                  className="inline-flex h-7 items-center justify-center rounded-md bg-brand-600 px-2 text-[11px] leading-none text-white hover:bg-brand-700"
                   onClick={() =>
                     handlePublish(test._id)
                   }
@@ -86,13 +86,12 @@ export default function TestsTable() {
   return (
     <div>
       {/* Toolbar */}
-      <div className="toolbar">
+      <div className="mb-2.5 flex h-11 items-center">
         <Link
+          className="inline-flex h-7 items-center justify-center rounded-md bg-brand-600 px-2 text-[11px] leading-none text-white hover:bg-brand-700"
           to={`/creator/classes/${classId}/tests/create`}
         >
-          <button className="btn btn-xs">
-            Create Test
-          </button>
+          Create Test
         </Link>
       </div>
 

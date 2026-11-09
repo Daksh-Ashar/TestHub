@@ -2,7 +2,6 @@ import { useContext, useState } from "react";
 import ClassInfo from "../../Components/ClassInfo";
 import ParticipantsTable from "../../Components/ParticipantsTable";
 import TestsTable from "../../Components/TestsTable";
-import "../../styles/classDetails.css";
 import { useParams } from "react-router-dom";
 import { ClassContext } from "../Class/Contexts/classContext";
 
@@ -13,33 +12,45 @@ const ClassDetails = () => {
   const {classes} = useContext(ClassContext)!;
   const cls = classes.find(c => c._id === classId);
   if (!cls) {
-    return <div>Class not found</div>;
+    return <div className="p-5">Class not found</div>;
   }
 
   return (
-    <div className="class-page">
+    <div className="p-5 font-[Arial,sans-serif]">
 
-      <h1 className="class-title">{cls.name}</h1>
+      <h1 className="mb-5 text-2xl">{cls.name}</h1>
 
       {/* Tabs */}
-      <div className="tabs">
+      <div className="mb-5 flex border-b border-gray-300">
 
         <button
-          className={activeTab === "details" ? "tab active" : "tab"}
+          className={`border-b-[3px] px-5 py-2.5 text-base hover:bg-gray-100 ${
+            activeTab === "details"
+              ? "border-blue-600 font-bold"
+              : "border-transparent"
+          }`}
           onClick={() => setActiveTab("details")}
         >
           Class Detail
         </button>
 
         <button
-          className={activeTab === "participants" ? "tab active" : "tab"}
+          className={`border-b-[3px] px-5 py-2.5 text-base hover:bg-gray-100 ${
+            activeTab === "participants"
+              ? "border-blue-600 font-bold"
+              : "border-transparent"
+          }`}
           onClick={() => setActiveTab("participants")}
         >
           Participants
         </button>
 
         <button
-          className={activeTab === "tests" ? "tab active" : "tab"}
+          className={`border-b-[3px] px-5 py-2.5 text-base hover:bg-gray-100 ${
+            activeTab === "tests"
+              ? "border-blue-600 font-bold"
+              : "border-transparent"
+          }`}
           onClick={() => setActiveTab("tests")}
         >
           Tests
@@ -49,7 +60,7 @@ const ClassDetails = () => {
 
       {/* Tab Content */}
 
-      <div className="tab-content">
+      <div className="bg-white">
 
         {activeTab === "details" && <ClassInfo classId={classId} />}
         {activeTab === "participants" && <ParticipantsTable classId={classId}/>}

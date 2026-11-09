@@ -33,7 +33,7 @@ export default function Timer({ duration, onTimeUp }: TimerProps) {
   }
 
   return (
-    <div style={{ fontSize: "1.5rem", fontWeight: "bold" }}>
+    <div className="mx-auto flex w-full max-w-sm items-center justify-center rounded-md bg-gradient-to-r from-[#073A7C] via-[#1767AD] to-[#255B8E] px-6 py-3 text-2xl font-bold text-white">
       ⏱ {display}
     </div>
   );

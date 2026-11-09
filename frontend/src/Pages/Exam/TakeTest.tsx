@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import api from "../../api/axios";
-import "../../styles/takeTest.css";
 import testConfig from "../../config/testConfig";
 import TestShell from "../../Components/TestShell";
 import Timer from "../../Components/Timer";
@@ -208,25 +207,42 @@ export default function TakeTest() {
   };
 
   if (questionsStatus === "loading") {
-    return <div className="test-status">Loading test questions...</div>;
+    return (
+      <div className="mx-auto my-12 max-w-xl rounded-lg border border-gray-300 bg-white p-8 text-center">
+        Loading test questions...
+      </div>
+    );
   }
 
   if (questionsStatus === "error") {
     return (
-      <div className="test-status" role="alert">
+      <div
+        className="mx-auto my-12 max-w-xl rounded-lg border border-gray-300 bg-white p-8 text-center"
+        role="alert"
+      >
         <h2>Unable to load this test</h2>
         <p>{questionsError}</p>
-        <button onClick={() => void fetchQuestions()}>Retry</button>
+        <button
+          className="mt-3 cursor-pointer rounded border border-gray-300 px-4 py-2 hover:bg-gray-100"
+          onClick={() => void fetchQuestions()}
+        >
+          Retry
+        </button>
       </div>
     );
   }
 
   if (questionsStatus === "empty") {
     return (
-      <div className="test-status">
+      <div className="mx-auto my-12 max-w-xl rounded-lg border border-gray-300 bg-white p-8 text-center">
         <h2>This test has no questions yet</h2>
         <p>There are no questions available to answer at this time.</p>
-        <button onClick={() => void fetchQuestions()}>Check again</button>
+        <button
+          className="mt-3 cursor-pointer rounded border border-gray-300 px-4 py-2 hover:bg-gray-100"
+          onClick={() => void fetchQuestions()}
+        >
+          Check again
+        </button>
       </div>
     );
   }
@@ -235,19 +251,20 @@ export default function TakeTest() {
 
   return (
     <TestShell maxViolations={3} onForceSubmit={() => handleSubmit("auto")}>
-      <div className="test-container">
+      <div className="flex flex-col gap-5 lg:flex-row">
 
         {/* LEFT - QUESTION */}
-        <div className="question-panel">
-          <h3>
-            Question {currentIndex + 1} / {questions.length}
-          </h3>
+        <div className="w-full lg:w-3/5">
+          <p className="mb-4 text-lg font-medium">
+            {currentQuestion.questionText}
+          </p>
 
-          <p className="question-text">{currentQuestion.questionText}</p>
-
-          <div className="options">
+          <div className="flex flex-col gap-2.5">
             {currentQuestion.options.map((opt) => (
-              <label key={opt.optionId} className="option">
+              <label
+                key={opt.optionId}
+                className="flex cursor-pointer items-center gap-2.5 p-2"
+              >
                 <input
                   type="radio"
                   name={currentQuestion._id}
@@ -262,41 +279,56 @@ export default function TakeTest() {
           </div>
 
           {/* Navigation */}
-          <div className="nav-buttons">
-            <button onClick={handlePrev} disabled={currentIndex === 0}>
+          <div className="mt-5 flex flex-wrap gap-2.5">
+            <button
+              className="rounded border border-[#1767AD] bg-white px-4 py-2 text-[#1767AD] hover:bg-blue-50 disabled:cursor-not-allowed disabled:opacity-50"
+              onClick={handlePrev}
+              disabled={currentIndex === 0}
+            >
               Previous
             </button>
 
             <button
+              className="rounded border border-[#1767AD] bg-white px-4 py-2 text-[#1767AD] hover:bg-blue-50 disabled:cursor-not-allowed disabled:opacity-50"
               onClick={handleNext}
               disabled={currentIndex === questions.length - 1}
             >
               Next
             </button>
 
-            <button onClick={() => handleSubmit("manual")}>Submit Test</button>
+            <button
+              className="rounded bg-gradient-to-r from-[#073A7C] via-[#1767AD] to-[#255B8E] px-4 py-2 text-white hover:brightness-110"
+              onClick={() => handleSubmit("manual")}
+            >
+              Submit Test
+            </button>
           </div>
         </div>
 
         {/* RIGHT - NAVIGATOR */}
-        <div className="navigator">
-        
-        <div style={{ marginBottom: "10px" }}>
-          {detailsStatus === "loading" ? (
-            <div>Loading timer...</div>
-          ) : detailsStatus === "error" || duration === null ? (
-            <div role="status">
-              <div>Timer unavailable</div>
-              <button onClick={() => void fetchTestMeta()}>Retry timer</button>
-            </div>
-          ) : (
-            <Timer duration={duration} onTimeUp={() => handleSubmit("auto")} />
-          )}
-        </div>
-        
-          <h4>Questions</h4>
+        <div className="w-full lg:w-2/5">
+          <div className="mb-2.5">
+            {detailsStatus === "loading" ? (
+              <div>Loading timer...</div>
+            ) : detailsStatus === "error" || duration === null ? (
+              <div role="status">
+                <div>Timer unavailable</div>
+                <button
+                  className="mt-3 cursor-pointer rounded border border-gray-300 px-4 py-2 hover:bg-gray-100"
+                  onClick={() => void fetchTestMeta()}
+                >
+                  Retry timer
+                </button>
+              </div>
+            ) : (
+              <Timer
+                duration={duration}
+                onTimeUp={() => handleSubmit("auto")}
+              />
+            )}
+          </div>
 
-          <div className="grid">
+          <div className="mx-auto grid max-w-sm grid-cols-4 gap-2">
             {questions.map((q, index) => {
               const isAnswered = !!answers[q._id];
               const isCurrent = index === currentIndex;
@@ -304,10 +336,13 @@ export default function TakeTest() {
               return (
                 <div
                   key={q._id}
-                  className={`tile 
-                  ${isAnswered ? "answered" : "unanswered"} 
-                  ${isCurrent ? "current" : ""}
-                `}
+                  className={`cursor-pointer rounded p-2.5 text-center ${
+                    isCurrent
+                      ? "bg-gradient-to-r from-[#073A7C] via-[#1767AD] to-[#255B8E] text-white"
+                      : isAnswered
+                        ? "bg-green-300 text-black"
+                        : "bg-slate-500 text-white"
+                  }`}
                   onClick={() => goToQuestion(index)}
                 >
                   {index + 1}
@@ -317,15 +352,18 @@ export default function TakeTest() {
           </div>
 
           {/* Legend */}
-          <div className="legend">
-            <p>
-              <span className="box green"></span> Answered
+          <div className="mx-auto mt-5 flex max-w-sm flex-wrap justify-center gap-x-4 gap-y-2 text-sm">
+            <p className="flex items-center whitespace-nowrap">
+              <span className="mr-1.5 inline-block h-3 w-3 rounded-sm bg-green-300"></span>
+              Answered
             </p>
-            <p>
-              <span className="box orange"></span> Not Answered
+            <p className="flex items-center whitespace-nowrap">
+              <span className="mr-1.5 inline-block h-3 w-3 rounded-sm bg-slate-500"></span>
+              Not Answered
             </p>
-            <p>
-              <span className="box blue"></span> Current
+            <p className="flex items-center whitespace-nowrap">
+              <span className="mr-1.5 inline-block h-3 w-3 rounded-sm bg-gradient-to-r from-[#073A7C] via-[#1767AD] to-[#255B8E]"></span>
+              Current
             </p>
           </div>
         </div>

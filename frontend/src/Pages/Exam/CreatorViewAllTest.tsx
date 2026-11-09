@@ -43,7 +43,7 @@ const CreatorViewAllTest = () => {
             <span>Published</span>
           ) : (
             <button
-              className="btn"
+              className="rounded bg-gradient-to-r from-[#073A7C] via-[#1767AD] to-[#255B8E] px-4 py-2 font-medium text-white shadow-md transition hover:-translate-y-px hover:shadow-lg"
               onClick={() =>
                 navigate(
                   `/creator/tests/${params.data._id}/edit`
