@@ -1,9 +1,9 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Auth from "./Pages/Auth";
 import NotFound from "./Pages/NotFound";
 import ProtectedRoute from "./Components/ProtectedRoute";
 import ErrorBoundary from "./Components/ErrorBoundary";
-import DashboardLayout from "./Layout/DashboardLayout";
+import RoleLayout from "./Layout/RoleLayout";
 import CreatorClasses from "./Pages/Creator/CreatorClasses";
 import ParticipantClasses from "./Pages/participant/ParticipantClasses";
 import ClassDetails from "./Pages/Creator/ClassDetails";
@@ -31,10 +31,11 @@ function App() {
             path="/creator"
             element={
               <ProtectedRoute allowedRole="creator">
-                <DashboardLayout />
+                <RoleLayout />
               </ProtectedRoute>
             }
           >
+            <Route index element={<Navigate to="classes" replace />} />
             <Route path="classes" element={<ClassProvider><CreatorClasses /></ClassProvider >} />
             <Route path="classes/:classId" element={<ClassProvider><ClassDetails /></ClassProvider>} />
             <Route
@@ -52,10 +53,11 @@ function App() {
             path="/participant"
             element={
               <ProtectedRoute allowedRole="participant">
-                <DashboardLayout />
+                <RoleLayout />
               </ProtectedRoute>
             }
           >
+            <Route index element={<Navigate to="classes" replace />} />
             <Route
               path="classes/:classId"
               element={<ClassProvider><ParticipantClassDetails /></ClassProvider>}

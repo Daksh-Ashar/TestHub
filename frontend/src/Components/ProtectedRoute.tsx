@@ -26,7 +26,7 @@ const ProtectedRoute = ({
 
   // Role Check
   if (allowedRole && auth.user.role !== allowedRole) {
-    // Redirect to dashboard based on role type
+    // Redirect to the role root, which forwards to the classes page.
     if (auth.user.role === "creator") {
       return <Navigate to="/creator" replace />;
     } else {

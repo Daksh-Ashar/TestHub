@@ -25,21 +25,6 @@ const Sidebar = () => {
 
       <nav className="flex flex-1 flex-col gap-1">
         <NavLink
-          to={`/${role}`}
-          end
-          className={({ isActive }) =>
-            `rounded-lg px-3 py-2 text-sm transition-colors ${
-              isActive
-                ? "bg-slate-700 font-semibold text-white"
-                : "text-slate-300 hover:bg-slate-700/70 hover:text-white"
-            }`
-          }
-        >
-          <span className="hidden sm:inline">Dashboard</span>
-          <span className="sm:hidden">Home</span>
-        </NavLink>
-
-        <NavLink
           to={`/${role}/classes`}
           className={({ isActive }) =>
             `rounded-lg px-3 py-2 text-sm transition-colors ${
