@@ -13,7 +13,7 @@ import api from "../../api/axios.js";
 
 import type { Test } from "../../Types/test.type.js";
 
-import type { ColDef } from "ag-grid-community";
+import type { ColDef, ICellRendererParams } from "ag-grid-community";
 
 import ClassInfo from "../../Components/ClassInfo.js";
 
@@ -66,7 +66,7 @@ import { ClassContext } from "../Class/Contexts/classContext.js";
     }
   }, [activeTab, onTestTabClick]);
 
-  const columnDefs = useMemo<ColDef[]>(
+  const columnDefs = useMemo<ColDef<Test>[]>(
     () => [
       {
         headerName: "Test Name",
@@ -85,7 +85,6 @@ import { ClassContext } from "../Class/Contexts/classContext.js";
 
       {
         headerName: "Action",
-        field: "action",
 
         sortable: false,
         filter: false,
@@ -93,18 +92,32 @@ import { ClassContext } from "../Class/Contexts/classContext.js";
         width: 180,
         pinned: "right",
 
-        cellRenderer: (params: any) => (
-          <button
-            className="border-0 bg-transparent font-bold text-blue-800 hover:underline"
-            onClick={() => {
-              navigate(
-                `/participant/classes/${classId}/tests/${params.data._id}/instructions`
-              );
-            }}
-          >
-            Start Test
-          </button>
-        ),
+        cellRenderer: (params: ICellRendererParams<Test>) => {
+          const test = params.data;
+          if (!test) return null;
+
+          if (test.hasSubmitted) {
+            return (
+              <span className="block w-full text-center font-medium text-green-700">
+                Submitted
+              </span>
+            );
+          }
+
+          return (
+            <button
+              type="button"
+              className="border-0 bg-transparent font-bold text-blue-800 hover:underline"
+              onClick={() =>
+                navigate(
+                  `/participant/classes/${classId}/tests/${test._id}/instructions`,
+                )
+              }
+            >
+              Start Test
+            </button>
+          );
+        },
       },
     ],
     [navigate, classId]

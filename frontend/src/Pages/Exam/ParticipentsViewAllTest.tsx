@@ -1,15 +1,17 @@
 import { memo, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "../../api/axios";
 
 import type { Test } from "../../Types/test.type";
 
-import type { ColDef } from "ag-grid-community";
+import type { ColDef, ICellRendererParams } from "ag-grid-community";
 
 import DataGrid from "../../Components/DataGrid";
 import "../../styles/ParticipentViewAllTest.css";
 
 const ParticipentViewAllTest = () => {
   const [tests, setTests] = useState<Test[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTests = async () => {
@@ -41,11 +43,31 @@ const ParticipentViewAllTest = () => {
       sortable: false,
     filter: false,
     floatingFilter: false,
-      cellRenderer: (params: any) => {
-        return params.value ? (
-          <button className="startTestBtnCls">Start Test</button>
-        ) : (
-          "Not Published"
+      cellRenderer: (params: ICellRendererParams<Test>) => {
+        const test = params.data;
+        if (!test) return null;
+        if (!test.isPublished) return "Not Published";
+
+        if (test.hasSubmitted) {
+          return (
+            <span className="block w-full text-center font-medium text-green-700">
+              Submitted
+            </span>
+          );
+        }
+
+        return (
+          <button
+            type="button"
+            className="startTestBtnCls"
+            onClick={() =>
+              navigate(
+                `/participant/classes/${test.classId}/tests/${test._id}/instructions`,
+              )
+            }
+          >
+            Start Test
+          </button>
         );
       },
     },

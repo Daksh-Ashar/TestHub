@@ -18,6 +18,25 @@ interface Question {
 
 type RequestStatus = "loading" | "success" | "empty" | "error";
 
+const getResponseMessage = (error: unknown): string | undefined => {
+  if (
+    typeof error !== "object" ||
+    error === null ||
+    !("response" in error) ||
+    typeof error.response !== "object" ||
+    error.response === null ||
+    !("data" in error.response) ||
+    typeof error.response.data !== "object" ||
+    error.response.data === null ||
+    !("message" in error.response.data) ||
+    typeof error.response.data.message !== "string"
+  ) {
+    return undefined;
+  }
+
+  return error.response.data.message;
+};
+
 const shuffleArray = <T,>(array: T[]): T[] => {
   const shuffled = [...array];
   for (let i = shuffled.length - 1; i > 0; i--) {
@@ -83,10 +102,14 @@ export default function TakeTest() {
       setDuration(res.data.duration * 60);
       setDetailsStatus("success");
     } catch (err) {
+      if (getResponseMessage(err) === "Test already submitted") {
+        navigate(`/participant/classes/${classId}/tests/${testId}/result`);
+        return;
+      }
       console.error("Test details request failed:", err);
       setDetailsStatus("error");
     }
-  }, [duration, testId]);
+  }, [classId, duration, navigate, testId]);
 
   const fetchQuestions = useCallback(async () => {
     if (!testId) {
@@ -109,11 +132,15 @@ export default function TakeTest() {
       setCurrentIndex(0);
       setQuestionsStatus(finalQuestions.length === 0 ? "empty" : "success");
     } catch (err) {
+      if (getResponseMessage(err) === "Test already submitted") {
+        navigate(`/participant/classes/${classId}/tests/${testId}/result`);
+        return;
+      }
       console.error("Questions request failed:", err);
       setQuestionsError("We couldn't load the questions for this test.");
       setQuestionsStatus("error");
     }
-  }, [testId]);
+  }, [classId, navigate, testId]);
 
   // ================= FETCH TEST DATA =================
   useEffect(() => {
@@ -180,19 +207,7 @@ export default function TakeTest() {
         navigate(`/participant/classes/${classId}/tests/${testId}/result`);
       }
     } catch (err: unknown) {
-      const message =
-        typeof err === "object" &&
-        err !== null &&
-        "response" in err &&
-        typeof err.response === "object" &&
-        err.response !== null &&
-        "data" in err.response &&
-        typeof err.response.data === "object" &&
-        err.response.data !== null &&
-        "message" in err.response.data &&
-        typeof err.response.data.message === "string"
-          ? err.response.data.message
-          : undefined;
+      const message = getResponseMessage(err);
 
       console.error("Submit error:", message || err);
 

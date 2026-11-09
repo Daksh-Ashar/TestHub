@@ -41,7 +41,11 @@ export const getTestByClassId = async (req: AuthRequest<{ classId: string }>, re
   try {
     const { classId } = req.params;
 
-    const tests = await TestService.getTestByClassId(classId);
+    const tests = await TestService.getTestByClassId(
+      classId,
+      req.user!.userId,
+      req.user!.role,
+    );
     res.json(tests);
   } catch (error: unknown) {
     return respondWithError(res, error, "Fetching class tests failed");
