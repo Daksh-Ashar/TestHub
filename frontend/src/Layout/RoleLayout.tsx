@@ -1,10 +1,9 @@
 import { Outlet } from "react-router-dom";
 import Sidebar from "../Components/Sidebar";
 import Header from "../Components/Header";
-import "../styles/dashboard.css";
 
 
-const DashboardLayout = () => {
+const RoleLayout = () => {
   return (
     <div className="flex min-h-screen bg-slate-100">
       <Sidebar />
@@ -19,4 +18,4 @@ const DashboardLayout = () => {
   );
 };
 
-export default DashboardLayout;
+export default RoleLayout;
