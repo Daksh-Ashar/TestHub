@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import api from "../../api/axios";
-import "../../styles/takeTest.css";
 import testConfig from "../../config/testConfig";
 import TestShell from "../../Components/TestShell";
 import Timer from "../../Components/Timer";
@@ -208,25 +207,42 @@ export default function TakeTest() {
   };
 
   if (questionsStatus === "loading") {
-    return <div className="test-status">Loading test questions...</div>;
+    return (
+      <div className="mx-auto my-12 max-w-xl rounded-lg border border-gray-300 bg-white p-8 text-center">
+        Loading test questions...
+      </div>
+    );
   }
 
   if (questionsStatus === "error") {
     return (
-      <div className="test-status" role="alert">
+      <div
+        className="mx-auto my-12 max-w-xl rounded-lg border border-gray-300 bg-white p-8 text-center"
+        role="alert"
+      >
         <h2>Unable to load this test</h2>
         <p>{questionsError}</p>
-        <button onClick={() => void fetchQuestions()}>Retry</button>
+        <button
+          className="mt-3 cursor-pointer rounded border border-gray-300 px-4 py-2 hover:bg-gray-100"
+          onClick={() => void fetchQuestions()}
+        >
+          Retry
+        </button>
       </div>
     );
   }
 
   if (questionsStatus === "empty") {
     return (
-      <div className="test-status">
+      <div className="mx-auto my-12 max-w-xl rounded-lg border border-gray-300 bg-white p-8 text-center">
         <h2>This test has no questions yet</h2>
         <p>There are no questions available to answer at this time.</p>
-        <button onClick={() => void fetchQuestions()}>Check again</button>
+        <button
+          className="mt-3 cursor-pointer rounded border border-gray-300 px-4 py-2 hover:bg-gray-100"
+          onClick={() => void fetchQuestions()}
+        >
+          Check again
+        </button>
       </div>
     );
   }
@@ -235,19 +251,22 @@ export default function TakeTest() {
 
   return (
     <TestShell maxViolations={3} onForceSubmit={() => handleSubmit("auto")}>
-      <div className="test-container">
+      <div className="flex flex-col gap-5 lg:flex-row">
 
         {/* LEFT - QUESTION */}
-        <div className="question-panel">
+        <div className="w-full lg:w-3/5">
           <h3>
             Question {currentIndex + 1} / {questions.length}
           </h3>
 
-          <p className="question-text">{currentQuestion.questionText}</p>
+          <p className="mb-4 text-lg">{currentQuestion.questionText}</p>
 
-          <div className="options">
+          <div className="flex flex-col gap-2.5">
             {currentQuestion.options.map((opt) => (
-              <label key={opt.optionId} className="option">
+              <label
+                key={opt.optionId}
+                className="cursor-pointer border border-gray-300 p-2"
+              >
                 <input
                   type="radio"
                   name={currentQuestion._id}
@@ -262,41 +281,58 @@ export default function TakeTest() {
           </div>
 
           {/* Navigation */}
-          <div className="nav-buttons">
-            <button onClick={handlePrev} disabled={currentIndex === 0}>
+          <div className="mt-5 flex flex-wrap gap-2.5">
+            <button
+              className="rounded border border-gray-300 px-4 py-2 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50"
+              onClick={handlePrev}
+              disabled={currentIndex === 0}
+            >
               Previous
             </button>
 
             <button
+              className="rounded border border-gray-300 px-4 py-2 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50"
               onClick={handleNext}
               disabled={currentIndex === questions.length - 1}
             >
               Next
             </button>
 
-            <button onClick={() => handleSubmit("manual")}>Submit Test</button>
+            <button
+              className="rounded bg-brand-600 px-4 py-2 text-white hover:bg-brand-700"
+              onClick={() => handleSubmit("manual")}
+            >
+              Submit Test
+            </button>
           </div>
         </div>
 
         {/* RIGHT - NAVIGATOR */}
-        <div className="navigator">
-        
-        <div style={{ marginBottom: "10px" }}>
-          {detailsStatus === "loading" ? (
-            <div>Loading timer...</div>
-          ) : detailsStatus === "error" || duration === null ? (
-            <div role="status">
-              <div>Timer unavailable</div>
-              <button onClick={() => void fetchTestMeta()}>Retry timer</button>
-            </div>
-          ) : (
-            <Timer duration={duration} onTimeUp={() => handleSubmit("auto")} />
-          )}
-        </div>
-        
+        <div className="w-full lg:w-2/5">
+          <div className="mb-2.5">
+            {detailsStatus === "loading" ? (
+              <div>Loading timer...</div>
+            ) : detailsStatus === "error" || duration === null ? (
+              <div role="status">
+                <div>Timer unavailable</div>
+                <button
+                  className="mt-3 cursor-pointer rounded border border-gray-300 px-4 py-2 hover:bg-gray-100"
+                  onClick={() => void fetchTestMeta()}
+                >
+                  Retry timer
+                </button>
+              </div>
+            ) : (
+              <Timer
+                duration={duration}
+                onTimeUp={() => handleSubmit("auto")}
+              />
+            )}
+          </div>
+
           <h4>Questions</h4>
 
-          <div className="grid">
+          <div className="mt-2 grid grid-cols-5 gap-2">
             {questions.map((q, index) => {
               const isAnswered = !!answers[q._id];
               const isCurrent = index === currentIndex;
@@ -304,10 +340,9 @@ export default function TakeTest() {
               return (
                 <div
                   key={q._id}
-                  className={`tile 
-                  ${isAnswered ? "answered" : "unanswered"} 
-                  ${isCurrent ? "current" : ""}
-                `}
+                  className={`cursor-pointer rounded p-2.5 text-center ${
+                    isAnswered ? "bg-[#28a745] text-white" : "bg-[#ffa500]"
+                  } ${isCurrent ? "border-2 border-[#0000ff]" : ""}`}
                   onClick={() => goToQuestion(index)}
                 >
                   {index + 1}
@@ -317,15 +352,18 @@ export default function TakeTest() {
           </div>
 
           {/* Legend */}
-          <div className="legend">
+          <div className="mt-5">
             <p>
-              <span className="box green"></span> Answered
+              <span className="mr-1.5 inline-block h-3 w-3 bg-[#28a745]"></span>
+              Answered
             </p>
             <p>
-              <span className="box orange"></span> Not Answered
+              <span className="mr-1.5 inline-block h-3 w-3 bg-[#ffa500]"></span>
+              Not Answered
             </p>
             <p>
-              <span className="box blue"></span> Current
+              <span className="mr-1.5 inline-block h-3 w-3 bg-[#0000ff]"></span>
+              Current
             </p>
           </div>
         </div>

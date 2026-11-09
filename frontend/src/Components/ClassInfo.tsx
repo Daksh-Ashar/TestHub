@@ -1,6 +1,5 @@
 import { useContext, useEffect } from "react";
 import { ClassContext } from "../Pages/Class/Contexts/classContext";
-import "../styles/ClassInfo.css";
 
 export default function ClassInfo({classId}: {classId?: string}) {
   const {classes, fetchClasses} = useContext(ClassContext)!;
@@ -14,7 +13,7 @@ export default function ClassInfo({classId}: {classId?: string}) {
   }, [classId]);
 
   return(
-    <div className="ClassInfoCls">
+    <div className="space-y-2 p-4 font-mono text-[1.2rem]">
 
       <p><strong>Class Name:</strong> {cls?.name ? cls.name : "No name available"}</p>
       <p><strong>Description:</strong> {cls?.description ? cls.description : "No description available"}</p>
