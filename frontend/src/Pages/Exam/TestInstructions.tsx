@@ -40,15 +40,15 @@ export default function TestInstructions() {
           <h2 className="mb-2 text-lg font-semibold">🎯 Question Colors</h2>
           <div className="space-y-1 pl-4">
             <p>
-              <span className="mr-1.5 inline-block h-3 w-3 bg-green-600"></span>
+              <span className="mr-1.5 inline-block h-3 w-3 rounded-sm bg-green-300"></span>
               Answered Question
             </p>
             <p>
-              <span className="mr-1.5 inline-block h-3 w-3 bg-orange-500"></span>
+              <span className="mr-1.5 inline-block h-3 w-3 rounded-sm bg-slate-500"></span>
               Not Answered Question
             </p>
             <p>
-              <span className="mr-1.5 inline-block h-3 w-3 bg-blue-600"></span>
+              <span className="mr-1.5 inline-block h-3 w-3 rounded-sm bg-gradient-to-r from-[#073A7C] via-[#1767AD] to-[#255B8E]"></span>
               Current Question
             </p>
           </div>
@@ -81,7 +81,7 @@ export default function TestInstructions() {
 
           <button
             onClick={handleStartTest}
-            className="mt-2 w-full cursor-pointer rounded-md bg-[#4a90e2] p-3 text-white hover:bg-blue-600"
+            className="mt-2 w-full cursor-pointer rounded-md bg-gradient-to-r from-[#073A7C] via-[#1767AD] to-[#255B8E] p-3 font-medium text-white hover:brightness-110"
           >
             Start Test
           </button>

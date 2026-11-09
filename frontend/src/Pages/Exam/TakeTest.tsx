@@ -255,17 +255,15 @@ export default function TakeTest() {
 
         {/* LEFT - QUESTION */}
         <div className="w-full lg:w-3/5">
-          <h3>
-            Question {currentIndex + 1} / {questions.length}
-          </h3>
-
-          <p className="mb-4 text-lg">{currentQuestion.questionText}</p>
+          <p className="mb-4 text-lg font-medium">
+            {currentQuestion.questionText}
+          </p>
 
           <div className="flex flex-col gap-2.5">
             {currentQuestion.options.map((opt) => (
               <label
                 key={opt.optionId}
-                className="cursor-pointer border border-gray-300 p-2"
+                className="flex cursor-pointer items-center gap-2.5 p-2"
               >
                 <input
                   type="radio"
@@ -283,7 +281,7 @@ export default function TakeTest() {
           {/* Navigation */}
           <div className="mt-5 flex flex-wrap gap-2.5">
             <button
-              className="rounded border border-gray-300 px-4 py-2 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50"
+              className="rounded border border-[#1767AD] bg-white px-4 py-2 text-[#1767AD] hover:bg-blue-50 disabled:cursor-not-allowed disabled:opacity-50"
               onClick={handlePrev}
               disabled={currentIndex === 0}
             >
@@ -291,7 +289,7 @@ export default function TakeTest() {
             </button>
 
             <button
-              className="rounded border border-gray-300 px-4 py-2 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50"
+              className="rounded border border-[#1767AD] bg-white px-4 py-2 text-[#1767AD] hover:bg-blue-50 disabled:cursor-not-allowed disabled:opacity-50"
               onClick={handleNext}
               disabled={currentIndex === questions.length - 1}
             >
@@ -299,7 +297,7 @@ export default function TakeTest() {
             </button>
 
             <button
-              className="rounded bg-brand-600 px-4 py-2 text-white hover:bg-brand-700"
+              className="rounded bg-gradient-to-r from-[#073A7C] via-[#1767AD] to-[#255B8E] px-4 py-2 text-white hover:brightness-110"
               onClick={() => handleSubmit("manual")}
             >
               Submit Test
@@ -330,9 +328,7 @@ export default function TakeTest() {
             )}
           </div>
 
-          <h4>Questions</h4>
-
-          <div className="mt-2 grid grid-cols-5 gap-2">
+          <div className="mx-auto grid max-w-sm grid-cols-4 gap-2">
             {questions.map((q, index) => {
               const isAnswered = !!answers[q._id];
               const isCurrent = index === currentIndex;
@@ -341,8 +337,12 @@ export default function TakeTest() {
                 <div
                   key={q._id}
                   className={`cursor-pointer rounded p-2.5 text-center ${
-                    isAnswered ? "bg-[#28a745] text-white" : "bg-[#ffa500]"
-                  } ${isCurrent ? "border-2 border-[#0000ff]" : ""}`}
+                    isCurrent
+                      ? "bg-gradient-to-r from-[#073A7C] via-[#1767AD] to-[#255B8E] text-white"
+                      : isAnswered
+                        ? "bg-green-300 text-black"
+                        : "bg-slate-500 text-white"
+                  }`}
                   onClick={() => goToQuestion(index)}
                 >
                   {index + 1}
@@ -352,17 +352,17 @@ export default function TakeTest() {
           </div>
 
           {/* Legend */}
-          <div className="mt-5">
-            <p>
-              <span className="mr-1.5 inline-block h-3 w-3 bg-[#28a745]"></span>
+          <div className="mx-auto mt-5 flex max-w-sm flex-wrap justify-center gap-x-4 gap-y-2 text-sm">
+            <p className="flex items-center whitespace-nowrap">
+              <span className="mr-1.5 inline-block h-3 w-3 rounded-sm bg-green-300"></span>
               Answered
             </p>
-            <p>
-              <span className="mr-1.5 inline-block h-3 w-3 bg-[#ffa500]"></span>
+            <p className="flex items-center whitespace-nowrap">
+              <span className="mr-1.5 inline-block h-3 w-3 rounded-sm bg-slate-500"></span>
               Not Answered
             </p>
-            <p>
-              <span className="mr-1.5 inline-block h-3 w-3 bg-[#0000ff]"></span>
+            <p className="flex items-center whitespace-nowrap">
+              <span className="mr-1.5 inline-block h-3 w-3 rounded-sm bg-gradient-to-r from-[#073A7C] via-[#1767AD] to-[#255B8E]"></span>
               Current
             </p>
           </div>
