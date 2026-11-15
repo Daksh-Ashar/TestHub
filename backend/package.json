@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "node --loader ts-node/esm src/server.ts",
     "build": "tsc",
-    "start": "node dist/server.js"
+    "start": "node dist/server.js",
+    "seed:demo": "node --loader ts-node/esm scripts/seedDemoData.ts"
   },
   "keywords": [],
   "author": "",
