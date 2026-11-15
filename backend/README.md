@@ -2,9 +2,9 @@
 
 ## Seed demo data
 
-The demo seeder creates fictional users, a Web Development class, a published HTML/CSS test, and participant submissions. It upserts the fixtures, so rerunning it updates the same demo records. Use a disposable development or test database.
+The demo seeder creates 30 fictional participants, a Web Development class, and four published tests: HTML, CSS, JavaScript, and React foundations. All participants have submitted the HTML and CSS tests; JavaScript and React remain pending. Rerunning it refreshes the demo submissions and resets the JavaScript and React tests to pending for these accounts. Use a disposable development or test database.
 
-Set `NODE_ENV` to `development` or `test`, set `SEED_DEMO_DATA=true` as an explicit confirmation, and set `MONGO_URI` to the intended development/test database. Then run from the `backend` directory:
+Copy `.env.example` to `.env` and fill in local settings. Keep `.env` out of Git. Set `NODE_ENV` to `development` or `test`, set `SEED_DEMO_DATA=true` as an explicit confirmation, and set `MONGO_URI` to the intended development/test database. Then run from the `backend` directory:
 
 ```powershell
 $env:NODE_ENV = "development"
