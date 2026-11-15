@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface Props {
   children: React.ReactNode;
@@ -19,13 +19,15 @@ export default function TestShell({
 
   // ================= FULLSCREEN ENTER =================
   const enterFullScreen = async () => {
-    const elem = document.documentElement;
+    const elem = document.documentElement as HTMLElement & {
+      webkitRequestFullscreen?: () => Promise<void> | void;
+    };
 
     try {
       if (elem.requestFullscreen) {
         await elem.requestFullscreen();
-      } else if ((elem as any).webkitRequestFullscreen) {
-        await (elem as any).webkitRequestFullscreen();
+      } else if (elem.webkitRequestFullscreen) {
+        await elem.webkitRequestFullscreen();
       }
       setShowFullscreenPrompt(false); // hide prompt once fullscreen
     } catch (err) {
@@ -35,17 +37,17 @@ export default function TestShell({
   };
 
   // ================= VIOLATION HANDLER =================
-  const handleViolation = () => {
+  const handleViolation = useCallback(() => {
     if (violations.current >= maxViolations) return;
 
     const next = ++violations.current;
     setViolationCount(next);
 
     if (next === maxViolations) onForceSubmit();
-  };
+  }, [maxViolations, onForceSubmit]);
 
   // ================= FULLSCREEN CHANGE =================
-  const handleFullscreenChange = () => {
+  const handleFullscreenChange = useCallback(() => {
     const fs = !!document.fullscreenElement;
 
     if (!fs) {
@@ -55,14 +57,14 @@ export default function TestShell({
     } else {
       setShowFullscreenPrompt(false);
     }
-  };
+  }, [handleViolation]);
 
   // ================= TAB SWITCH =================
-  const handleVisibility = () => {
+  const handleVisibility = useCallback(() => {
     if (document.hidden) {
       handleViolation();
     }
-  };
+  }, [handleViolation]);
 
   // ================= INIT =================
   useEffect(() => {
@@ -73,7 +75,7 @@ export default function TestShell({
       document.removeEventListener("fullscreenchange", handleFullscreenChange);
       document.removeEventListener("visibilitychange", handleVisibility);
     };
-  }, []);
+  }, [handleFullscreenChange, handleVisibility]);
 
   return (
     <div>

@@ -1,14 +1,10 @@
-import type mongoose from "mongoose";
-import type { ObjectId, Types } from "mongoose";
-
 export const ROLES = {
   CREATOR: "creator",
   PARTICIPANT: "participant",
 } as const;
 
 // Optional: Type for role values
-export type Role = typeof ROLES[keyof typeof ROLES];
-
+export type Role = (typeof ROLES)[keyof typeof ROLES];
 
 export interface CreateClassBody {
   name: string;
@@ -34,10 +30,10 @@ export interface AddQuestionBody {
 }
 
 export interface Options {
-  optionId : string;
-  contentType : string;
-  contentValue : string;
-  isCorrect : boolean;
+  optionId: string;
+  contentType: string;
+  contentValue: string;
+  isCorrect: boolean;
 }
 
 export interface answersBody {
@@ -49,4 +45,3 @@ export interface SubmitTestBody {
   testId: string;
   answers: answersBody[];
 }
-

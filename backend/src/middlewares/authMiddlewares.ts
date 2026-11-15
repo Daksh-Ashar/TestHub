@@ -7,8 +7,11 @@ interface JwtPayload {
   role: Role;
 }
 
-export interface AuthRequest<P = {}, ResBody = any, ReqBody = any> 
-  extends Request<P, ResBody, ReqBody> {
+export interface AuthRequest<
+  P extends Record<string, string> = Record<string, string>,
+  ResBody = unknown,
+  ReqBody = unknown,
+> extends Request<P, ResBody, ReqBody> {
   user?: JwtPayload;
 }
 
@@ -16,7 +19,11 @@ const JWT_SECRET = process.env.JWT_SECRET;
 if (!JWT_SECRET) throw new Error("JWT_SECRET not defined");
 
 // Middleware to verify JWT from cookie
-export const protect = (req: AuthRequest, res: Response, next: NextFunction) => {
+export const protect = (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+) => {
   const token = req.cookies?.token;
   if (!token) return res.status(401).json({ message: "Unauthorized" });
 

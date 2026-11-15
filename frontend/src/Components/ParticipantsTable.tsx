@@ -6,30 +6,33 @@ import {
 } from "../Pages/Class/Contexts/classContext";
 import DataGrid from "./DataGrid";
 
-export default function ParticipantsTable({
-  classId,
-}: {
-  classId?: string;
-}) {
+export default function ParticipantsTable({ classId }: { classId?: string }) {
   const { fetchParticipants } = useContext(ClassContext)!;
 
-  const [participants, setParticipants] = useState<Participant[]>(
-    []
-  );
+  const [participantData, setParticipantData] = useState<{
+    classId: string;
+    participants: Participant[];
+  } | null>(null);
 
   useEffect(() => {
-    if (classId) {
-      const records = fetchParticipants(classId);
+    if (!classId) return;
 
-      if (records instanceof Promise) {
-        records.then((data: Participant[]) =>
-          setParticipants(data)
-        );
-      } else {
-        setParticipants([]);
+    let cancelled = false;
+    void fetchParticipants(classId).then((data) => {
+      if (!cancelled) {
+        setParticipantData({ classId, participants: data });
       }
-    }
-  }, [classId]);
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [classId, fetchParticipants]);
+
+  const participants =
+    participantData && participantData.classId === classId
+      ? participantData.participants
+      : [];
 
   const columnDefs = useMemo<ColDef<Participant>[]>(
     () => [
@@ -45,7 +48,7 @@ export default function ParticipantsTable({
         flex: 1,
       },
     ],
-    []
+    [],
   );
 
   return (

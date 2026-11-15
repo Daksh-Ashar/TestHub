@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import api from "../../../api/axios";
 import { useNavigate } from "react-router-dom";
 
-
-
 interface Class {
   _id: string;
   name: string;
@@ -25,7 +23,7 @@ export const useParticipantClasses = () => {
       const res = await api.get("/classes/my");
       setClasses(res.data);
     } catch (err) {
-      console.error("Failed to fetch classes");
+      console.error("Failed to fetch classes", err);
     } finally {
       setLoading(false);
     }
@@ -50,13 +48,13 @@ export const useParticipantClasses = () => {
       setClassCode("");
       await fetchClasses();
     } catch (err) {
-      console.error("Failed to join class");
+      console.error("Failed to join class", err);
     } finally {
       setJoining(false);
     }
   };
 
-return {
+  return {
     classes,
     classCode,
     setClassCode,
@@ -65,7 +63,6 @@ return {
     showJoinForm,
     setShowJoinForm,
     handleJoin,
-    navigate
-}
-
-}
+    navigate,
+  };
+};

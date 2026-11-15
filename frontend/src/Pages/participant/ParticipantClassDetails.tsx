@@ -4,7 +4,7 @@ import {
   useContext,
   useCallback,
   useMemo,
-  memo
+  memo,
 } from "react";
 
 import { useParams, useNavigate } from "react-router-dom";
@@ -21,7 +21,7 @@ import DataGrid from "../../Components/DataGrid.js";
 
 import { ClassContext } from "../Class/Contexts/classContext.js";
 
- const ParticipantClassDetails = () => {
+const ParticipantClassDetails = () => {
   const { classId } = useParams<{ classId: string }>();
 
   const [activeTab, setActiveTab] = useState<"details" | "tests">("details");
@@ -36,7 +36,7 @@ import { ClassContext } from "../Class/Contexts/classContext.js";
     if (classId) {
       fetchClasses();
     }
-  }, [classId]);
+  }, [classId, fetchClasses]);
 
   const cls = classes.find((c) => c._id === classId);
 
@@ -47,9 +47,7 @@ import { ClassContext } from "../Class/Contexts/classContext.js";
       try {
         const res = await api.get<Test[]>(`/tests/${classId}`);
 
-        const published = res.data.filter(
-          (t) => t.isPublished === true
-        );
+        const published = res.data.filter((t) => t.isPublished === true);
 
         setTests(published);
       } catch (err) {
@@ -59,12 +57,6 @@ import { ClassContext } from "../Class/Contexts/classContext.js";
 
     if (classId) fetchTests();
   }, [classId]);
-
-  useEffect(() => {
-    if (activeTab === "tests") {
-      onTestTabClick();
-    }
-  }, [activeTab, onTestTabClick]);
 
   const columnDefs = useMemo<ColDef<Test>[]>(
     () => [
@@ -79,8 +71,7 @@ import { ClassContext } from "../Class/Contexts/classContext.js";
         field: "duration",
         width: 150,
 
-        valueFormatter: (params) =>
-          `${params.value} mins`,
+        valueFormatter: (params) => `${params.value} mins`,
       },
 
       {
@@ -120,7 +111,7 @@ import { ClassContext } from "../Class/Contexts/classContext.js";
         },
       },
     ],
-    [navigate, classId]
+    [navigate, classId],
   );
 
   if (!cls) {
@@ -159,9 +150,7 @@ import { ClassContext } from "../Class/Contexts/classContext.js";
       {/* Tab Content */}
 
       <div className="bg-white">
-        {activeTab === "details" && (
-          <ClassInfo classId={classId} />
-        )}
+        {activeTab === "details" && <ClassInfo classId={classId} />}
 
         {activeTab === "tests" && (
           <DataGrid<Test>
@@ -174,6 +163,6 @@ import { ClassContext } from "../Class/Contexts/classContext.js";
       </div>
     </div>
   );
-}
+};
 
 export default memo(ParticipantClassDetails);

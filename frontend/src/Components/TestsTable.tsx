@@ -1,6 +1,6 @@
-import { useEffect, useState, useMemo } from "react";
+import { useCallback, useEffect, useState, useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
-import type { ColDef } from "ag-grid-community";
+import type { ColDef, ICellRendererParams } from "ag-grid-community";
 
 import api from "../api/axios";
 import type { Test } from "../Types/test.type";
@@ -24,20 +24,16 @@ export default function TestsTable() {
     fetchTests();
   }, [classId]);
 
-  const handlePublish = async (testId: string) => {
+  const handlePublish = useCallback(async (testId: string) => {
     try {
       await api.patch(`/tests/${testId}/publish`);
       setTests((prev) =>
-        prev.map((t) =>
-          t._id === testId
-            ? { ...t, isPublished: true }
-            : t
-        )
+        prev.map((t) => (t._id === testId ? { ...t, isPublished: true } : t)),
       );
     } catch (err) {
       console.error(err);
     }
-  };
+  }, []);
 
   const columnDefs = useMemo<ColDef<Test>[]>(
     () => [
@@ -47,8 +43,6 @@ export default function TestsTable() {
         flex: 1,
       },
 
-     
-
       {
         headerName: "Actions",
         sortable: false,
@@ -56,8 +50,9 @@ export default function TestsTable() {
         width: 260,
         pinned: "right",
 
-        cellRenderer: (params: any) => {
-          const test: Test = params.data;
+        cellRenderer: (params: ICellRendererParams<Test>) => {
+          const test = params.data;
+          if (!test) return null;
 
           return (
             <div className="flex gap-2">
@@ -68,9 +63,7 @@ export default function TestsTable() {
               {!test.isPublished && (
                 <button
                   className="inline-flex h-7 items-center justify-center rounded-md bg-brand-600 px-2 text-[11px] leading-none text-white hover:bg-brand-700"
-                  onClick={() =>
-                    handlePublish(test._id)
-                  }
+                  onClick={() => handlePublish(test._id)}
                 >
                   Publish
                 </button>
@@ -80,7 +73,7 @@ export default function TestsTable() {
         },
       },
     ],
-    []
+    [handlePublish],
   );
 
   return (
