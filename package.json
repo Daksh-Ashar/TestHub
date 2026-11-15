@@ -1,0 +1,24 @@
+{
+  "name": "testhub-repo-tooling",
+  "private": true,
+  "scripts": {
+    "prepare": "husky",
+    "validate": "npm --prefix frontend run build && npm --prefix backend run build"
+  },
+  "lint-staged": {
+    "frontend/**/*.{ts,tsx}": [
+      "prettier --write",
+      "cd frontend && npm exec -- eslint --fix"
+    ],
+    "backend/**/*.ts": [
+      "prettier --write",
+      "cd backend && npm exec -- eslint --fix"
+    ],
+    "**/*.{js,jsx,mjs,cjs,json,css,scss,html,md,yml,yaml}": "prettier --write"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
+    "prettier": "^3.10.1"
+  }
+}
