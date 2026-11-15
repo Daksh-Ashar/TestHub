@@ -1,0 +1,7 @@
+backend/dist/
+frontend/dist/
+frontend/build/
+coverage/
+package-lock.json
+backend/package-lock.json
+frontend/package-lock.json
