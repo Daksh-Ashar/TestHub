@@ -1,18 +1,21 @@
 import type { Response } from "express";
 import * as QuestionService from "./question.service.js";
-import type {  AuthenticatedRequestWithBody } from "../../types/express.js";
+import type { AuthenticatedRequestWithBody } from "../../types/express.js";
 import type { UserPayload } from "../../types/express.js";
 import type { AddQuestionBody } from "../../constants/roles.js";
 import { respondWithError } from "../../utils/errorResponse.js";
 
-export const addQuestion = async (req: AuthenticatedRequestWithBody<AddQuestionBody, UserPayload>, res: Response) => {
+export const addQuestion = async (
+  req: AuthenticatedRequestWithBody<AddQuestionBody, UserPayload>,
+  res: Response,
+) => {
   try {
     const { testId, questionText, options } = req.body;
     const question = await QuestionService.addQuestion(
       testId,
       questionText,
       options,
-      req.user!.userId
+      req.user!.userId,
     );
 
     res.status(201).json(question);
@@ -21,7 +24,10 @@ export const addQuestion = async (req: AuthenticatedRequestWithBody<AddQuestionB
   }
 };
 
-export const getQuestionsByTest = async (req: AuthenticatedRequestWithBody<{}, UserPayload>, res: Response) => {
+export const getQuestionsByTest = async (
+  req: AuthenticatedRequestWithBody<unknown, UserPayload>,
+  res: Response,
+) => {
   try {
     const { testId } = req.params;
     if (!testId || Array.isArray(testId)) {
@@ -30,7 +36,7 @@ export const getQuestionsByTest = async (req: AuthenticatedRequestWithBody<{}, U
     const questions = await QuestionService.getQuestionsByTest(
       testId,
       req.user!.userId,
-      req.user!.role
+      req.user!.role,
     );
     res.status(200).json(questions);
   } catch (error) {

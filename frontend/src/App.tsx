@@ -15,7 +15,7 @@ import ResultScreen from "./Pages/Exam/ResultScreen";
 import ParticipentsResults from "./Pages/Results/ParticipentsResults";
 import CreatorViewAllTest from "./Pages/Exam/CreatorViewAllTest";
 import HomeRedirect from "./Components/HomeRedirect";
-import { ClassProvider } from "./Pages/Class/Contexts/classContext";
+import { ClassProvider } from "./Pages/Class/Contexts/ClassProvider";
 import TestInstructions from "./Pages/Exam/TestInstructions";
 import ParticipentsViewAllTest from "./Pages/Exam/ParticipentsViewAllTest";
 
@@ -36,8 +36,22 @@ function App() {
             }
           >
             <Route index element={<Navigate to="classes" replace />} />
-            <Route path="classes" element={<ClassProvider><CreatorClasses /></ClassProvider >} />
-            <Route path="classes/:classId" element={<ClassProvider><ClassDetails /></ClassProvider>} />
+            <Route
+              path="classes"
+              element={
+                <ClassProvider>
+                  <CreatorClasses />
+                </ClassProvider>
+              }
+            />
+            <Route
+              path="classes/:classId"
+              element={
+                <ClassProvider>
+                  <ClassDetails />
+                </ClassProvider>
+              }
+            />
             <Route
               path="classes/:classId/tests/create"
               element={<CreateTest />}
@@ -60,7 +74,11 @@ function App() {
             <Route index element={<Navigate to="classes" replace />} />
             <Route
               path="classes/:classId"
-              element={<ClassProvider><ParticipantClassDetails /></ClassProvider>}
+              element={
+                <ClassProvider>
+                  <ParticipantClassDetails />
+                </ClassProvider>
+              }
             />
             <Route
               path="classes/:classId/tests/:testId"
@@ -75,7 +93,14 @@ function App() {
               element={<ResultScreen />}
             />
             <Route path="tests" element={<ParticipentsViewAllTest />} />
-            <Route path="classes" element={<ClassProvider><ParticipantClasses /></ClassProvider>} />
+            <Route
+              path="classes"
+              element={
+                <ClassProvider>
+                  <ParticipantClasses />
+                </ClassProvider>
+              }
+            />
             <Route path="results" element={<ParticipentsResults />} />
           </Route>
           <Route path="*" element={<NotFound />} />

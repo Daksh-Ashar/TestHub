@@ -1,13 +1,16 @@
-import type { Request, Response } from "express";
+import type { Response } from "express";
 import * as TestService from "./test.service.js";
 import type { AuthRequest } from "../../middlewares/authMiddlewares.js";
-import type { AsyncRequestHandler, AuthenticatedRequestWithBody } from "../../types/express.js";
+import type { AuthenticatedRequestWithBody } from "../../types/express.js";
 import type { UserPayload } from "../../types/express.js";
 import type { CreateTestBody } from "../../constants/roles.js";
 import { Types } from "mongoose";
 import { respondWithError } from "../../utils/errorResponse.js";
 
-export const createTest = async (req: AuthenticatedRequestWithBody<CreateTestBody, UserPayload>, res: Response) => {
+export const createTest = async (
+  req: AuthenticatedRequestWithBody<CreateTestBody, UserPayload>,
+  res: Response,
+) => {
   try {
     const { title, description, classId, duration } = req.body;
 
@@ -16,7 +19,7 @@ export const createTest = async (req: AuthenticatedRequestWithBody<CreateTestBod
       description,
       classId,
       duration,
-      req.user!.userId
+      req.user!.userId,
     );
 
     res.status(201).json(test);
@@ -25,7 +28,10 @@ export const createTest = async (req: AuthenticatedRequestWithBody<CreateTestBod
   }
 };
 
-export const publishTest = async (req: AuthRequest<{ testId: string }>, res: Response) => {
+export const publishTest = async (
+  req: AuthRequest<{ testId: string }>,
+  res: Response,
+) => {
   try {
     const { testId } = req.params;
 
@@ -37,7 +43,10 @@ export const publishTest = async (req: AuthRequest<{ testId: string }>, res: Res
   }
 };
 
-export const getTestByClassId = async (req: AuthRequest<{ classId: string }>, res: Response) => {
+export const getTestByClassId = async (
+  req: AuthRequest<{ classId: string }>,
+  res: Response,
+) => {
   try {
     const { classId } = req.params;
 
@@ -55,18 +64,28 @@ export const getTestByClassId = async (req: AuthRequest<{ classId: string }>, re
 export const getTestListByRole = async (req: AuthRequest, res: Response) => {
   try {
     console.log("Controller - Fetching test list for user:", req.user);
-    const tests = await TestService.getTestListByRole(req.user!.userId, req.user!.role);
+    const tests = await TestService.getTestListByRole(
+      req.user!.userId,
+      req.user!.role,
+    );
     res.json(tests);
   } catch (error: unknown) {
     return respondWithError(res, error, "Fetching test list failed");
   }
 };
 
-export const getBasicInfoByTestId = async (req: AuthRequest<{ testId: string }>, res: Response) => {
+export const getBasicInfoByTestId = async (
+  req: AuthRequest<{ testId: string }>,
+  res: Response,
+) => {
   try {
     const { testId } = req.params;
     const userId = new Types.ObjectId(req.user!.userId);
-    const testInfo = await TestService.getBasicInfoByTestId(testId, userId, req.user!.role);
+    const testInfo = await TestService.getBasicInfoByTestId(
+      testId,
+      userId,
+      req.user!.role,
+    );
     res.json(testInfo);
   } catch (error: unknown) {
     return respondWithError(res, error, "Fetching test details failed");

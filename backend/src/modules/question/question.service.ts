@@ -4,11 +4,12 @@ import { ClassModel } from "../class/class.model.js";
 import { SubmissionModel } from "../submission/submission.model.js";
 import { ROLES } from "../../constants/roles.js";
 import type { Role } from "../../constants/roles.js";
+import type { Options } from "../../constants/roles.js";
 
 export class QuestionRequestError extends Error {
   constructor(
     message: string,
-    public readonly statusCode: 403 | 404 | 409
+    public readonly statusCode: 403 | 404 | 409,
   ) {
     super(message);
     this.name = "QuestionRequestError";
@@ -18,8 +19,8 @@ export class QuestionRequestError extends Error {
 export const addQuestion = async (
   testId: string,
   questionText: string,
-  options: any[],
-  creatorId: string
+  options: Options[],
+  creatorId: string,
 ) => {
   const test = await TestModel.findById(testId);
   if (!test) throw new Error("Test not found");
@@ -36,11 +37,10 @@ export const addQuestion = async (
   return question;
 };
 
-
 export const getQuestionsByTest = async (
   testId: string,
   userId: string,
-  role: Role
+  role: Role,
 ) => {
   const test = await TestModel.findById(testId);
   if (!test) throw new QuestionRequestError("Test not found", 404);
@@ -86,7 +86,7 @@ export const getQuestionsByTest = async (
           optionId,
           contentType,
           contentValue,
-        })
+        }),
       ),
     };
   });

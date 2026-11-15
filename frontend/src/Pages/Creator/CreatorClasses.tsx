@@ -12,7 +12,7 @@ const CreatorClasses = () => {
 
   useEffect(() => {
     fetchClasses();
-  }, []);
+  }, [fetchClasses]);
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,7 +28,7 @@ const CreatorClasses = () => {
       setDescription("");
       await fetchClasses();
     } catch (err) {
-      console.error("Create class failed");
+      console.error("Create class failed", err);
     } finally {
       setLoading(false);
     }
@@ -69,9 +69,7 @@ const CreatorClasses = () => {
             type="text"
             placeholder="Class Name"
             value={name}
-            onChange={(e) =>
-              setName(e.target.value)
-            }
+            onChange={(e) => setName(e.target.value)}
             required
             className="w-full rounded border border-gray-300 p-2"
           />
@@ -79,9 +77,7 @@ const CreatorClasses = () => {
           <textarea
             placeholder="Description"
             value={description}
-            onChange={(e) =>
-              setDescription(e.target.value)
-            }
+            onChange={(e) => setDescription(e.target.value)}
             className="w-full rounded border border-gray-300 p-2"
           />
 
@@ -90,9 +86,7 @@ const CreatorClasses = () => {
             className="w-fit cursor-pointer rounded bg-brand-600 px-4 py-2 text-white hover:bg-brand-700 disabled:cursor-not-allowed disabled:opacity-60"
             disabled={loading}
           >
-            {loading
-              ? "Creating..."
-              : "Create Class"}
+            {loading ? "Creating..." : "Create Class"}
           </button>
         </form>
       </div>

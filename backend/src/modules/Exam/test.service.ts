@@ -1,7 +1,6 @@
 import { TestModel } from "./test.model.js";
 import { ClassModel } from "../class/class.model.js";
 import { SubmissionModel } from "../submission/submission.model.js";
-import type { ObjectId } from "mongoose";
 import { Types } from "mongoose";
 
 export const createTest = async (
@@ -9,7 +8,7 @@ export const createTest = async (
   description: string,
   classId: string,
   duration: number,
-  creatorId: string
+  creatorId: string,
 ) => {
   const classExists = await ClassModel.findById(classId);
 
@@ -47,7 +46,6 @@ export const publishTest = async (testId: string, creatorId: string) => {
   return test;
 };
 
-
 export const getTestByClassId = async (
   classId: string,
   userId: string,
@@ -83,7 +81,7 @@ export const getTestListByRole = async (userId: string, role: string) => {
 
   if (role === "participant") {
     const classes = await ClassModel.find({
-      participants: userId
+      participants: userId,
     }).select("_id");
 
     const classIds = classes.map((c) => c._id);
@@ -93,7 +91,7 @@ export const getTestListByRole = async (userId: string, role: string) => {
 
     const tests = await TestModel.find({
       classId: { $in: classIds },
-      isPublished: true
+      isPublished: true,
     });
 
     const submittedTestIds = new Set(
@@ -114,11 +112,14 @@ export const getTestListByRole = async (userId: string, role: string) => {
   throw new Error("Invalid role");
 };
 
-
-export const getBasicInfoByTestId = async (testId: string, userId: Types.ObjectId, role: string) => {
+export const getBasicInfoByTestId = async (
+  testId: string,
+  userId: Types.ObjectId,
+  role: string,
+) => {
   const test = await TestModel.findById(testId);
   if (!test) throw new Error("Test not found");
-  
+
   if (role === "creator" && test.createdBy.equals(userId)) {
     return test;
   }
@@ -126,7 +127,7 @@ export const getBasicInfoByTestId = async (testId: string, userId: Types.ObjectI
   if (role === "participant") {
     const classInfo = await ClassModel.findById(test.classId);
     if (!classInfo) throw new Error("Class not found");
-  
+
     if (classInfo.participants.includes(userId) && test.isPublished) {
       const submission = await SubmissionModel.exists({
         testId: test._id,
@@ -140,6 +141,3 @@ export const getBasicInfoByTestId = async (testId: string, userId: Types.ObjectI
 
   throw new Error("Not authorized to view this test");
 };
-
-
-

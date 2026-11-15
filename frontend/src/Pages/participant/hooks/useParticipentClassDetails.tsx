@@ -1,12 +1,11 @@
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ClassContext } from "../../Class/Contexts/classContext.js";
-import type { ColDef } from "ag-grid-community";
+import type { ColDef, ICellRendererParams } from "ag-grid-community";
 import api from "../../../api/axios.js";
 import type { Test } from "../../../Types/test.type.js";
 
-export const  useParticipentClassDetails = (classIdParam?: string) => {
-
+export const useParticipentClassDetails = (classIdParam?: string) => {
   const { classId: routeClassId } = useParams<{ classId: string }>();
   const classId = classIdParam ?? routeClassId;
   const [activeTab, setActiveTab] = useState<"details" | "tests">("details");
@@ -21,35 +20,26 @@ export const  useParticipentClassDetails = (classIdParam?: string) => {
     if (classId) {
       fetchClasses();
     }
-  }, [classId]);
+  }, [classId, fetchClasses]);
 
   const cls = classes.find((c) => c._id === classId);
 
-  const onTestTabClick = useCallback(() => {
-    setActiveTab("tests");
+  const fetchTests = useCallback(async () => {
+    if (!classId) return;
 
-    const fetchTests = async () => {
-      try {
-        const res = await api.get<Test[]>(`/tests/${classId}`);
-
-        const published = res.data.filter(
-          (t) => t.isPublished === true
-        );
-
-        setTests(published);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    if (classId) fetchTests();
+    try {
+      const res = await api.get<Test[]>(`/tests/${classId}`);
+      const published = res.data.filter((test) => test.isPublished);
+      setTests(published);
+    } catch (err) {
+      console.error(err);
+    }
   }, [classId]);
 
-  useEffect(() => {
-    if (activeTab === "tests") {
-      onTestTabClick();
-    }
-  }, [activeTab, onTestTabClick]);
+  const onTestTabClick = useCallback(() => {
+    setActiveTab("tests");
+    void fetchTests();
+  }, [fetchTests]);
 
   const columnDefs = useMemo<ColDef[]>(
     () => [
@@ -64,8 +54,7 @@ export const  useParticipentClassDetails = (classIdParam?: string) => {
         field: "duration",
         width: 150,
 
-        valueFormatter: (params) =>
-          `${params.value} mins`,
+        valueFormatter: (params) => `${params.value} mins`,
       },
 
       {
@@ -78,29 +67,34 @@ export const  useParticipentClassDetails = (classIdParam?: string) => {
         width: 180,
         pinned: "right",
 
-        cellRenderer: (params: any) => (
-          <button
-           className="actionButtonCls"
-            onClick={() => {
-              navigate(
-                `/participant/classes/${classId}/tests/${params.data._id}/instructions`
-              );
-            }}
-          >
-            Start Test
-          </button>
-        ),
+        cellRenderer: (params: ICellRendererParams<Test>) => {
+          const test = params.data;
+          if (!test) return null;
+
+          return (
+            <button
+              className="actionButtonCls"
+              onClick={() => {
+                navigate(
+                  `/participant/classes/${classId}/tests/${test._id}/instructions`,
+                );
+              }}
+            >
+              Start Test
+            </button>
+          );
+        },
       },
     ],
-    [navigate, classId]
+    [navigate, classId],
   );
-
 
   return {
     cls,
     activeTab,
     setActiveTab,
+    onTestTabClick,
     tests,
     columnDefs,
   };
-}
+};

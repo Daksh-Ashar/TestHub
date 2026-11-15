@@ -8,11 +8,11 @@
   "lint-staged": {
     "frontend/**/*.{ts,tsx}": [
       "prettier --write",
-      "cd frontend && npm exec -- eslint --fix"
+      "npm --prefix frontend run lint:staged --"
     ],
     "backend/**/*.ts": [
       "prettier --write",
-      "cd backend && npm exec -- eslint --fix"
+      "npm --prefix backend run lint:staged --"
     ],
     "**/*.{js,jsx,mjs,cjs,json,css,scss,html,md,yml,yaml}": "prettier --write"
   },
